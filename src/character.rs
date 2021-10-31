@@ -1,7 +1,6 @@
 
 
 use strum_macros::{EnumString, EnumVariantNames};
-use strum::VariantNames;
 
 pub struct Character {
     stats: Stats,

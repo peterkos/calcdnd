@@ -11,13 +11,15 @@ use console::Term;
 mod character;
 use character::*;
 
+// Other
 use strum::VariantNames;
+use std::str::FromStr;
 
 
 fn main() -> std::io::Result<()> {
 
-
     let selections = Select::new()
+        .default(0)
         .item("New Character")
         .item("Select existing character")
         .interact_on(&Term::stderr())?;
@@ -34,10 +36,19 @@ fn main() -> std::io::Result<()> {
 fn new_character() {
 
     let classes = Class::VARIANTS;
-    let selections = Select::new()
+    let select_index = Select::new()
         .items(&classes)
         .default(0)
-        .interact_on(&Term::stderr());
+        .interact()
+        .unwrap();
+
+    let class = Class::from_str(classes[select_index]).unwrap();
+
+    match class {
+        Class::Barbarian => println!("Yay!")
+    }
+
+
 }
 
 fn pick_character() {
