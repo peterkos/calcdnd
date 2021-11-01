@@ -1,6 +1,10 @@
 
 
-use dialoguer::{MultiSelect, Select, Input};
+use dialoguer::{Confirm, MultiSelect, Select, Input};
+use serde::Serialize;
+use serde::Deserialize;
+use std::fs::File;
+use std::io::prelude::*;
 
 // Data
 use crate::character::*;
@@ -10,7 +14,7 @@ use crate::data::*;
 use strum::VariantNames;
 use std::str::FromStr;
 
-#[derive(Debug)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Config {
     pub character: Character
 }
@@ -30,8 +34,9 @@ impl Config {
         self.class();
         self.stats();
         self.weapons();
-        self.saving_throws();
-        self.skills();
+        // self.saving_throws();
+        // self.skills();
+        self.save_prompt();
     }
 
     /// Pick a character
@@ -120,6 +125,31 @@ impl Config {
     }
     fn skills(&self) {
         unimplemented!()
+    }
+
+    fn save_prompt(&self) {
+
+        let save = Confirm::new()
+            .with_prompt("Save your new character?")
+            .interact()
+            .unwrap();
+
+        if !save {
+            ()
+        }
+
+        let mut file = match File::create("info.json"){
+            Err(e) => panic!("Can't make character file: {}", e),
+            Ok(f) => f
+        };
+
+        let contents = serde_json::to_string(&self.character).unwrap();
+        file.write_all(contents.as_bytes()).unwrap();
+
+        ()
+
+
+
     }
 
 

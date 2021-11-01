@@ -4,11 +4,12 @@
 /// to their own files as implemented.
 /// For now, it's easier to see them all at once here.
 
-
 use strum_macros::{EnumString, EnumVariantNames};
+use serde::Serialize;
+use serde::Deserialize;
 use parse_display::{Display};
 
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Serialize, Deserialize)]
 pub struct Stats {
     pub strength: u8,
     pub dexterity: u8,
@@ -67,14 +68,14 @@ pub struct Skills {
 }
 
 /// Supported classes
-#[derive(Default, Debug, EnumString, EnumVariantNames)]
+#[derive(Default, Debug, EnumString, EnumVariantNames, Serialize, Deserialize)]
 #[strum(serialize_all = "title_case")]
 pub enum Class {
     #[default] Barbarian
     // TODO: Do more :)
 }
 
-#[derive(Display, Debug, Clone)]
+#[derive(Display, Debug, Clone, Serialize, Deserialize)]
 #[display("{name}, {dice_count}d{dice}")]
 pub struct Weapon {
     pub name: String,
@@ -84,12 +85,12 @@ pub struct Weapon {
 }
 
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum Properties {
     Empty
 }
 
-#[derive(Display, Debug, Clone)]
+#[derive(Display, Debug, Clone, Serialize, Deserialize)]
 pub enum Dice {
     D3,
     D4,
