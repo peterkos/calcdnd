@@ -5,6 +5,7 @@ use serde::Serialize;
 use serde::Deserialize;
 use std::fs::File;
 use std::io::prelude::*;
+use std::io::BufReader;
 
 // Data
 use crate::character::*;
@@ -41,8 +42,24 @@ impl Config {
 
     /// Pick a character
     pub fn pick_character(&self) {
-        // TODO: Serialize to disk somehow
-        unimplemented!()
+
+        let file = match File::open("info.json") {
+            Err(e) => panic!("Can't find character file \"info.json\": {}", e),
+            Ok(f) => f
+
+        };
+
+        let buffer_in = BufReader::new(file);
+        let serialized = buffer_in.lines().next().unwrap();
+
+        let _parsed: Result<Character, serde_json::Error> = match serialized {
+            Ok(s) => serde_json::from_str(&s),
+            Err(e) => panic!("Unable to deserialize character: {}", e)
+        };
+
+        println!("Character imported sucessfully.");
+
+        ()
     }
 
     // MARK: Supporting functions
@@ -145,11 +162,6 @@ impl Config {
 
         let contents = serde_json::to_string(&self.character).unwrap();
         file.write_all(contents.as_bytes()).unwrap();
-
-        ()
-
-
-
     }
 
 
