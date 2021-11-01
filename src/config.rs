@@ -1,6 +1,6 @@
 
 
-use dialoguer::Select;
+use dialoguer::{Select, Input};
 
 // Data
 use crate::character::*;
@@ -59,8 +59,38 @@ impl Config {
         self.character.class = class;
     }
 
-    fn stats(&self) {
-        unimplemented!()
+    fn stats(&mut self) {
+        let strength = Input::new()
+            .with_prompt("Strength")
+            .interact_text()
+            .unwrap();
+
+        let dexterity = Input::new()
+            .with_prompt("Dexterity")
+            .interact_text()
+            .unwrap();
+
+        let constitution = Input::new()
+            .with_prompt("Constitution")
+            .interact_text()
+            .unwrap();
+
+        let intelligence = Input::new()
+            .with_prompt("Intelligence")
+            .interact_text()
+            .unwrap();
+
+        let wisdom = Input::new()
+            .with_prompt("Wisdom")
+            .interact_text()
+            .unwrap();
+
+        let charisma = Input::new()
+            .with_prompt("Charisma")
+            .interact_text()
+            .unwrap();
+
+        self.character.stats = Stats { strength, dexterity, constitution, intelligence, wisdom, charisma };
     }
     fn weapons(&self) {
         unimplemented!()
