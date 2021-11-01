@@ -2,19 +2,18 @@
 
 // Make life earlier
 #![allow(dead_code)]
+#![feature(derive_default_enum)]
 
 // CLI
 use dialoguer::Select;
 use console::Term;
 
 // Data
+mod config;
 mod character;
-use character::*;
+mod data;
 
-// Other
-use strum::VariantNames;
-use std::str::FromStr;
-
+use config::*;
 
 fn main() -> std::io::Result<()> {
 
@@ -24,33 +23,13 @@ fn main() -> std::io::Result<()> {
         .item("Select existing character")
         .interact_on(&Term::stderr())?;
 
+    let mut config = Config::default();
+
     match selections {
-        0 => new_character(),
-        1 => pick_character(),
+        0 => config.create_character(),
+        1 => config.pick_character(),
         _ => unimplemented!()
     }
 
     Ok(())
-}
-
-fn new_character() {
-
-    let classes = Class::VARIANTS;
-    let select_index = Select::new()
-        .items(&classes)
-        .default(0)
-        .interact()
-        .unwrap();
-
-    let class = Class::from_str(classes[select_index]).unwrap();
-
-    match class {
-        Class::Barbarian => println!("Yay!")
-    }
-
-
-}
-
-fn pick_character() {
-    // TODO: Also serialize to disk (serde?)
 }
