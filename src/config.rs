@@ -1,19 +1,21 @@
 
 
+use console::Term;
 use dialoguer::{Confirm, MultiSelect, Select, Input};
 use serde::Serialize;
 use serde::Deserialize;
 use std::fs::File;
 use std::io::prelude::*;
 use std::io::BufReader;
+use strum::VariantNames;
+use std::str::FromStr;
+
+use prettytable::{format, Table, Row, Cell};
 
 // Data
 use crate::character::*;
 use crate::data::*;
 
-// Other
-use strum::VariantNames;
-use std::str::FromStr;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Config {
@@ -67,6 +69,8 @@ impl Config {
             Ok(c) => c,
             Err(e) => panic!("Unable to read character. {}", e)
         };
+
+        self.print_character(&character);
 
         self.character = character;
         println!("Character imported sucessfully.");
@@ -190,6 +194,26 @@ impl Config {
 
         let contents = serde_json::to_string(&self.character).unwrap();
         file.write_all(contents.as_bytes()).unwrap();
+    }
+
+    fn print_character(&self, character: &Character) {
+
+        let mut table = Table::new();
+        table.set_format(*format::consts::FORMAT_NO_LINESEP_WITH_TITLE);
+
+        table.set_titles(row!["Stat", "Value"]);
+        table.add_row(row!["Strength",     character.stats.strength]);
+        table.add_row(row!["Dexterity",    character.stats.dexterity]);
+        table.add_row(row!["Constitution", character.stats.constitution]);
+        table.add_row(row!["Intelligence", character.stats.intelligence]);
+        table.add_row(row!["Wisdom",       character.stats.wisdom]);
+        table.add_row(row!["Charisma",     character.stats.charisma]);
+
+        let term = Term::stdout();
+        term.write_line(&table.to_string()).unwrap();
+
+        ()
+
     }
 
 

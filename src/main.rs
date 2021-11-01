@@ -4,6 +4,8 @@
 #![allow(dead_code)]
 #![feature(derive_default_enum)]
 
+#[macro_use] extern crate prettytable;
+
 // CLI
 use dialoguer::Select;
 use console::Term;
