@@ -10,3 +10,4 @@ console = "0.15.0"
 dialoguer = "0.9.0"
 strum = "0.22" # Enum val iter
 strum_macros = "0.22"
+parse-display = "0.5.3"

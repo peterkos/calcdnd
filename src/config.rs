@@ -1,6 +1,6 @@
 
 
-use dialoguer::{Select, Input};
+use dialoguer::{MultiSelect, Select, Input};
 
 // Data
 use crate::character::*;
@@ -92,13 +92,50 @@ impl Config {
 
         self.character.stats = Stats { strength, dexterity, constitution, intelligence, wisdom, charisma };
     }
-    fn weapons(&self) {
-        unimplemented!()
+
+    fn weapons(&mut self) {
+
+        let weapons: Vec<Weapon> = self.build_weapons();
+
+        let selected_weapons = MultiSelect::new()
+            .items(&weapons)
+            .interact()
+            .unwrap();
+
+
+        let mapped_weapons = selected_weapons
+            .into_iter().map(|w|
+                weapons[w].clone()
+            )
+            .collect();
+
+        self.character.weapons = mapped_weapons;
+
+        println!("User selected {:?}", self.character.weapons);
+
     }
+
     fn saving_throws(&self) {
         unimplemented!()
     }
     fn skills(&self) {
         unimplemented!()
+    }
+
+
+    // MARK: - Helper build functions
+
+    fn build_weapons(&self) -> Vec<Weapon> {
+
+        // TODO: Do this from a database or something
+
+        let mut weapons: Vec<Weapon> = Vec::new();
+
+        weapons.push(Weapon {name: String::from("Club"),      dice_count: 1, dice: Dice::D4, properties: Vec::new() });
+        weapons.push(Weapon {name: String::from("Dagger"),    dice_count: 1, dice: Dice::D4, properties: Vec::new() });
+        weapons.push(Weapon {name: String::from("Greatclub"), dice_count: 1, dice: Dice::D8, properties: Vec::new() });
+
+        weapons
+
     }
 }

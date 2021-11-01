@@ -6,6 +6,7 @@
 
 
 use strum_macros::{EnumString, EnumVariantNames};
+use parse_display::{Display};
 
 #[derive(Default, Debug)]
 pub struct Stats {
@@ -73,18 +74,22 @@ pub enum Class {
     // TODO: Do more :)
 }
 
-
-pub enum Weapon {
-    Club(Dice, Vec<Properties>),
-    Dagger(Dice, Vec<Properties>),
-    Greatclub(Dice, Vec<Properties>)
-    // TODO: More weapons
+#[derive(Display, Debug, Clone)]
+#[display("{name}, {dice_count}d{dice}")]
+pub struct Weapon {
+    pub name: String,
+    pub dice_count: u8,
+    pub dice: Dice,
+    pub properties: Vec<Properties>
 }
 
+
+#[derive(Debug, Clone)]
 pub enum Properties {
-    // TODO
+    Empty
 }
 
+#[derive(Display, Debug, Clone)]
 pub enum Dice {
     D3,
     D4,
