@@ -12,8 +12,10 @@ use console::Term;
 mod config;
 mod character;
 mod data;
+mod game;
 
 use config::*;
+use game::*;
 
 fn main() -> std::io::Result<()> {
 
@@ -30,6 +32,10 @@ fn main() -> std::io::Result<()> {
         1 => config.pick_character(),
         _ => unimplemented!()
     }
+
+    let game = Game{ character: config.character };
+
+    game.event_loop();
 
     Ok(())
 }

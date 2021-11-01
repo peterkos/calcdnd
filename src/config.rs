@@ -34,6 +34,8 @@ impl Config {
     pub fn create_character(&mut self) {
         self.name();
         self.class();
+        self.level();
+        self.character.calc_proficiency();
         self.stats();
         self.weapons();
         // self.saving_throws();
@@ -78,8 +80,15 @@ impl Config {
             .with_prompt("Name")
             .interact_text()
             .unwrap();
-
         self.character.name = name;
+    }
+
+    fn level(&mut self) {
+        let level = Input::new()
+            .with_prompt("Level")
+            .interact_text()
+            .unwrap();
+        self.character.level = level;
     }
 
     fn class(&mut self) {
