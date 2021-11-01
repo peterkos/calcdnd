@@ -13,7 +13,6 @@ impl Game {
 
     /// The main event loop for doing things!
     pub fn event_loop(&self) {
-
         loop {
             let options = vec![
                 "Attack Action",

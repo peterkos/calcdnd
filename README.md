@@ -1,4 +1,4 @@
-
+\
 # calcdnd
 
 A CLI tool to aid Dungeons and Dragons players with math(tm).
@@ -7,9 +7,11 @@ A CLI tool to aid Dungeons and Dragons players with math(tm).
 TODO
 
 ## Features
-- [ ] Create limited character data
+- [x] Create limited character data
+- [x] Save/Load characters
+- [ ] Hit points
 - [ ] Create weapons
-- [ ] Bonus calculation
+- [x] Bonus calculation
 - [ ] Support for add'l classes (only Barbarian for now)
 - [ ] Dice rolling (low priority)
 
