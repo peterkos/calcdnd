@@ -43,7 +43,7 @@ impl Config {
 
     /// Pick a character
     /// TODO: Allow for select/storage of _multiple_ characters
-    pub fn pick_character(&self) {
+    pub fn pick_character(&mut self) {
 
         let file = match File::open("info.json") {
             Err(e) => panic!("Can't find character file \"info.json\": {}", e),
@@ -54,13 +54,20 @@ impl Config {
         let buffer_in = BufReader::new(file);
         let serialized = buffer_in.lines().next().unwrap();
 
-        let _parsed: Result<Character, serde_json::Error> = match serialized {
+        // Input errors
+        let input: Result<Character, serde_json::Error> = match serialized {
             Ok(s) => serde_json::from_str(&s),
             Err(e) => panic!("Unable to deserialize character: {}", e)
         };
 
-        println!("Character imported sucessfully.");
+        // Serde parsing errors
+        let character = match input {
+            Ok(c) => c,
+            Err(e) => panic!("Unable to read character. {}", e)
+        };
 
+        self.character = character;
+        println!("Character imported sucessfully.");
         ()
     }
 
@@ -91,6 +98,7 @@ impl Config {
 
         self.character.class = class;
     }
+
 
     fn stats(&mut self) {
         let strength = Input::new()
