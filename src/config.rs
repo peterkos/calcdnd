@@ -32,6 +32,7 @@ impl Config {
 
     /// Create a new character
     pub fn create_character(&mut self) {
+        self.name();
         self.class();
         self.stats();
         self.weapons();
@@ -41,6 +42,7 @@ impl Config {
     }
 
     /// Pick a character
+    /// TODO: Allow for select/storage of _multiple_ characters
     pub fn pick_character(&self) {
 
         let file = match File::open("info.json") {
@@ -63,6 +65,15 @@ impl Config {
     }
 
     // MARK: Supporting functions
+
+    fn name(&mut self) {
+        let name = Input::new()
+            .with_prompt("Name")
+            .interact_text()
+            .unwrap();
+
+        self.character.name = name;
+    }
 
     fn class(&mut self) {
         let classes = Class::VARIANTS;

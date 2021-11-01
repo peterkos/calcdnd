@@ -6,6 +6,7 @@ use serde::Deserialize;
 
 #[derive(Default, Debug, Serialize, Deserialize)]
 pub struct Character {
+    pub name: String,
     pub class: Class,
     pub stats: Stats,
     pub weapons: Vec<Weapon>,
