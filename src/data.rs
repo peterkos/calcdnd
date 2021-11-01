@@ -7,13 +7,39 @@
 
 use strum_macros::{EnumString, EnumVariantNames};
 
+#[derive(Default, Debug)]
 pub struct Stats {
-    strength: String,
-    dexterity: String,
-    constitution: String,
-    intelligence: String,
-    wisdom: String,
-    charisma: String
+    pub strength: u8,
+    pub dexterity: u8,
+    pub constitution: u8,
+    pub intelligence: u8,
+    pub wisdom: u8,
+    pub charisma: u8
+}
+
+impl Stats {
+    /// Gets modifier from an incoming int
+    pub fn modifier(num: u8) -> i8 {
+        match num {
+            1       => -5,
+            2 | 3   => -4,
+            4 | 5   => -3,
+            6 | 7   => -2,
+            8 | 9   => -1,
+            10 | 11 => 0,
+            12 | 13 => 1,
+            14 | 15 => 2,
+            16 | 17 => 3,
+            18 | 19 => 4,
+            20 | 21 => 5,
+            22 | 23 => 6,
+            24 | 25 => 7,
+            26 | 27 => 8,
+            28 | 29 => 9,
+            30      => 10,
+            _       => num as i8
+        }
+    }
 }
 
 pub enum Stat {
@@ -24,6 +50,7 @@ pub enum Stat {
     Wisdom,
     Charisma
 }
+
 
 pub struct SavingThrows {
     strength:     (bool, u16),

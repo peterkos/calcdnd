@@ -23,9 +23,26 @@ impl Default for Config {
 
 impl Config {
 
-    pub fn create_character(&mut self) {
+    // MARK: - Main functions
 
-        // Get class
+    /// Create a new character
+    pub fn create_character(&mut self) {
+        self.class();
+        self.stats();
+        self.weapons();
+        self.saving_throws();
+        self.skills();
+    }
+
+    /// Pick a character
+    pub fn pick_character(&self) {
+        // TODO: Serialize to disk somehow
+        unimplemented!()
+    }
+
+    // MARK: Supporting functions
+
+    fn class(&mut self) {
         let classes = Class::VARIANTS;
         let select_index = Select::new()
             .items(&classes)
@@ -40,16 +57,18 @@ impl Config {
         }
 
         self.character.class = class;
-
-        // TODO
-        // Get weapons
-        // Get stats
-        // Get saving throws
-        // Get skills
     }
 
-    pub fn pick_character(&self) {
-        // TODO: Serialize to disk somehow
+    fn stats(&self) {
+        unimplemented!()
     }
-
+    fn weapons(&self) {
+        unimplemented!()
+    }
+    fn saving_throws(&self) {
+        unimplemented!()
+    }
+    fn skills(&self) {
+        unimplemented!()
+    }
 }
