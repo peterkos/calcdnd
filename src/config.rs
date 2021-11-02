@@ -1,6 +1,5 @@
 
 
-use console::Term;
 use dialoguer::{Confirm, MultiSelect, Select, Input};
 use serde::Serialize;
 use serde::Deserialize;
@@ -9,8 +8,6 @@ use std::io::prelude::*;
 use std::io::BufReader;
 use strum::VariantNames;
 use std::str::FromStr;
-
-use prettytable::{format, Table};
 
 // Data
 use crate::character::*;
@@ -69,8 +66,6 @@ impl Config {
             Ok(c) => c,
             Err(e) => panic!("Unable to read character. {}", e)
         };
-
-        self.print_character(&character);
 
         self.character = character;
         println!("Character imported sucessfully.");
@@ -213,43 +208,6 @@ impl Config {
         let contents = serde_json::to_string(&self.character).unwrap();
         file.write_all(contents.as_bytes()).unwrap();
     }
-
-    fn print_character(&self, character: &Character) {
-
-        let mut super_table = Table::new();
-        super_table.set_format(*format::consts::FORMAT_NO_LINESEP_WITH_TITLE);
-
-
-        // Stats table
-        let mut stat_table = Table::new();
-        stat_table.set_format(*format::consts::FORMAT_NO_LINESEP_WITH_TITLE);
-        stat_table.set_titles(row!["Stat", "Value"]);
-        stat_table.add_row(row!["Strength",     character.stats.strength]);
-        stat_table.add_row(row!["Dexterity",    character.stats.dexterity]);
-        stat_table.add_row(row!["Constitution", character.stats.constitution]);
-        stat_table.add_row(row!["Intelligence", character.stats.intelligence]);
-        stat_table.add_row(row!["Wisdom",       character.stats.wisdom]);
-        stat_table.add_row(row!["Charisma",     character.stats.charisma]);
-
-        // Saving throws table
-        let mut saving_throws_table = Table::new();
-        saving_throws_table.set_format(*format::consts::FORMAT_NO_LINESEP_WITH_TITLE);
-        saving_throws_table.set_titles(row!["Y/N", "Modifier"]);
-        for saving_throw in &character.saving_throws {
-            let valid = saving_throw.valid;
-            let stat  = saving_throw.stat.to_string();
-            saving_throws_table.add_row(row![valid, stat]);
-        }
-
-
-        super_table.set_titles(row!["Stats", "Saving Throws"]);
-        super_table.add_row(row![stat_table, saving_throws_table]);
-
-        // Write it out
-        let term = Term::stdout();
-        term.write_line(&super_table.to_string()).unwrap();
-    }
-
 
     // MARK: - Helper build functions
 

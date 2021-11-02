@@ -13,13 +13,17 @@ impl Game {
 
     /// The main event loop for doing things!
     pub fn event_loop(&self) {
-        loop {
-            let options = vec![
-                "Attack Action",
-                "Record Damage",
-                "Quit"
-            ];
+        let options = vec![
+            "[Action]",
+            "  Attack Action",
+            "  Record Damage",
+            "  Quit",
+            "[Character]",
+            "  View",
+            "  Edit (unimplemented)",
+        ];
 
+        loop {
             let selection = Select::new()
                 .items(&options)
                 .default(0)
@@ -27,9 +31,14 @@ impl Game {
                 .unwrap();
 
             match selection {
-                0 => self.attack(),
-                2 => return,
-                _ => ()
+                0 => continue, // [Action]
+                1 => self.attack(),
+                2 => continue, // TODO: self.damage()
+                3 => return,       // quit
+                4 => continue, // [Character]
+                5 => self.character.print(),
+                6 => continue, // TODO: Edit
+                _ => continue
             };
         }
 
@@ -37,13 +46,19 @@ impl Game {
 
     fn attack(&self) {
 
+        println!("Attacking!");
+
         // Pick weapon
         let weapons = &self.character.weapons;
         if weapons.is_empty() {
             println!("Error: No weapons specified.");
             return;
         }
+
+        // TODO: Spells vs. weapons
+
         let selection = Select::new()
+            .with_prompt("Which weapon?")
             .items(&weapons)
             .default(0)
             .interact();

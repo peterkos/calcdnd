@@ -25,6 +25,7 @@ fn main() -> std::io::Result<()> {
         .default(0)
         .item("New Character")
         .item("Select existing character")
+        .item("Quit")
         .interact_on(&Term::stderr())?;
 
     let mut config = Config::default();
@@ -32,6 +33,7 @@ fn main() -> std::io::Result<()> {
     match selections {
         0 => config.create_character(),
         1 => config.pick_character(),
+        2 => return Ok(()),
         _ => unimplemented!()
     }
 
