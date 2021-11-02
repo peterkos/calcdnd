@@ -10,7 +10,7 @@ use std::io::BufReader;
 use strum::VariantNames;
 use std::str::FromStr;
 
-use prettytable::{format, Table, Row, Cell};
+use prettytable::{format, Table};
 
 // Data
 use crate::character::*;
@@ -40,7 +40,7 @@ impl Config {
         self.character.calc_proficiency();
         self.stats();
         self.weapons();
-        // self.saving_throws();
+        self.saving_throws();
         // self.skills();
         self.save_prompt();
     }
@@ -112,7 +112,6 @@ impl Config {
         self.character.class = class;
     }
 
-
     fn stats(&mut self) {
         let strength = Input::new()
             .with_prompt("Strength")
@@ -169,9 +168,28 @@ impl Config {
 
     }
 
-    fn saving_throws(&self) {
-        unimplemented!()
+    fn saving_throws(&mut self) {
+
+        // First, multi-select them
+        let stats = Stat::VARIANTS;
+        let selected_throws = MultiSelect::new()
+            .items(&stats)
+            .interact()
+            .unwrap();
+
+        let mapped_throws: _ = selected_throws
+            .into_iter()
+            .map(|s|
+                Stat::from_str(stats[s].clone()).unwrap()
+            )
+            .map(|s|
+                SavingThrow {valid: true, stat: s}
+            )
+            .collect();
+
+        self.character.saving_throws = mapped_throws;
     }
+
     fn skills(&self) {
         unimplemented!()
     }
@@ -198,22 +216,38 @@ impl Config {
 
     fn print_character(&self, character: &Character) {
 
-        let mut table = Table::new();
-        table.set_format(*format::consts::FORMAT_NO_LINESEP_WITH_TITLE);
+        let mut super_table = Table::new();
+        super_table.set_format(*format::consts::FORMAT_NO_LINESEP_WITH_TITLE);
 
-        table.set_titles(row!["Stat", "Value"]);
-        table.add_row(row!["Strength",     character.stats.strength]);
-        table.add_row(row!["Dexterity",    character.stats.dexterity]);
-        table.add_row(row!["Constitution", character.stats.constitution]);
-        table.add_row(row!["Intelligence", character.stats.intelligence]);
-        table.add_row(row!["Wisdom",       character.stats.wisdom]);
-        table.add_row(row!["Charisma",     character.stats.charisma]);
 
+        // Stats table
+        let mut stat_table = Table::new();
+        stat_table.set_format(*format::consts::FORMAT_NO_LINESEP_WITH_TITLE);
+        stat_table.set_titles(row!["Stat", "Value"]);
+        stat_table.add_row(row!["Strength",     character.stats.strength]);
+        stat_table.add_row(row!["Dexterity",    character.stats.dexterity]);
+        stat_table.add_row(row!["Constitution", character.stats.constitution]);
+        stat_table.add_row(row!["Intelligence", character.stats.intelligence]);
+        stat_table.add_row(row!["Wisdom",       character.stats.wisdom]);
+        stat_table.add_row(row!["Charisma",     character.stats.charisma]);
+
+        // Saving throws table
+        let mut saving_throws_table = Table::new();
+        saving_throws_table.set_format(*format::consts::FORMAT_NO_LINESEP_WITH_TITLE);
+        saving_throws_table.set_titles(row!["Y/N", "Modifier"]);
+        for saving_throw in &character.saving_throws {
+            let valid = saving_throw.valid;
+            let stat  = saving_throw.stat.to_string();
+            saving_throws_table.add_row(row![valid, stat]);
+        }
+
+
+        super_table.set_titles(row!["Stats", "Saving Throws"]);
+        super_table.add_row(row![stat_table, saving_throws_table]);
+
+        // Write it out
         let term = Term::stdout();
-        term.write_line(&table.to_string()).unwrap();
-
-        ()
-
+        term.write_line(&super_table.to_string()).unwrap();
     }
 
 

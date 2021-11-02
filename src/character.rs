@@ -11,8 +11,8 @@ pub struct Character {
     pub level: u8,
     pub proficiency_bonus: u8,
     pub stats: Stats,
+    pub saving_throws: Vec<SavingThrow>,
     pub weapons: Vec<Weapon>,
-    // pub saving_throws: SavingThrows,
     // pub skills: Skills
 }
 

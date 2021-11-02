@@ -7,7 +7,8 @@
 use strum_macros::{EnumString, EnumVariantNames};
 use serde::Serialize;
 use serde::Deserialize;
-use parse_display::{Display};
+use parse_display::Display;
+// use std::fmt;
 
 #[derive(Default, Debug, Serialize, Deserialize)]
 pub struct Stats {
@@ -44,6 +45,8 @@ impl Stats {
     }
 }
 
+#[derive(EnumString, EnumVariantNames, Display, Debug,Clone, Serialize, Deserialize)]
+#[display(style = "Title Case")]
 pub enum Stat {
     Strength,
     Dexterity,
@@ -53,14 +56,10 @@ pub enum Stat {
     Charisma
 }
 
-
-pub struct SavingThrows {
-    strength:     (bool, u16),
-    dexterity:    (bool, u16),
-    constitution: (bool, u16),
-    intelligence: (bool, u16),
-    wisdom:       (bool, u16),
-    charisma:     (bool, u16),
+#[derive(Debug, Serialize, Deserialize)]
+pub struct SavingThrow {
+    pub valid: bool,
+    pub stat: Stat,
 }
 
 pub struct Skills {
