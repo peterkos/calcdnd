@@ -1,5 +1,6 @@
 
 
+use console::style;
 use dialoguer::{Confirm, MultiSelect, Select, Input};
 use serde::Serialize;
 use serde::Deserialize;
@@ -69,25 +70,19 @@ impl Config {
         };
 
         self.character = character;
-        println!("Character imported sucessfully.");
+        println!("Character {} imported sucessfully.", style(&self.character.name).green());
         ()
     }
 
     // MARK: Supporting functions
 
     fn name(&mut self) {
-        let name = Input::new()
-            .with_prompt("Name")
-            .interact_text()
-            .unwrap();
+        let name = Input::new().with_prompt("Name").interact_text().unwrap();
         self.character.name = name;
     }
 
     fn level(&mut self) {
-        let level = Input::new()
-            .with_prompt("Level")
-            .interact_text()
-            .unwrap();
+        let level = Input::new().with_prompt("Level").interact_text().unwrap();
         self.character.level = level;
     }
 
@@ -109,35 +104,12 @@ impl Config {
     }
 
     fn stats(&mut self) {
-        let strength = Input::new()
-            .with_prompt("Strength")
-            .interact_text()
-            .unwrap();
-
-        let dexterity = Input::new()
-            .with_prompt("Dexterity")
-            .interact_text()
-            .unwrap();
-
-        let constitution = Input::new()
-            .with_prompt("Constitution")
-            .interact_text()
-            .unwrap();
-
-        let intelligence = Input::new()
-            .with_prompt("Intelligence")
-            .interact_text()
-            .unwrap();
-
-        let wisdom = Input::new()
-            .with_prompt("Wisdom")
-            .interact_text()
-            .unwrap();
-
-        let charisma = Input::new()
-            .with_prompt("Charisma")
-            .interact_text()
-            .unwrap();
+        let strength     = Input::new().with_prompt("Strength").interact_text().unwrap();
+        let dexterity    = Input::new().with_prompt("Dexterity").interact_text().unwrap();
+        let constitution = Input::new().with_prompt("Constitution").interact_text().unwrap();
+        let intelligence = Input::new().with_prompt("Intelligence").interact_text().unwrap();
+        let wisdom       = Input::new().with_prompt("Wisdom").interact_text().unwrap();
+        let charisma     = Input::new().with_prompt("Charisma").interact_text().unwrap();
 
         self.character.stats = Stats { strength, dexterity, constitution, intelligence, wisdom, charisma };
     }
