@@ -36,6 +36,7 @@ impl Config {
         self.level();
         self.character.calc_proficiency();
         self.stats();
+        self.hit_points();
         self.weapons();
         self.saving_throws();
         // self.skills();
@@ -139,6 +140,17 @@ impl Config {
             .unwrap();
 
         self.character.stats = Stats { strength, dexterity, constitution, intelligence, wisdom, charisma };
+    }
+
+    fn hit_points(&mut self) {
+        let total_hit_points = Input::new()
+            .with_prompt("Total hit points")
+            .interact_text()
+            .unwrap();
+
+        // Assumed full health at start
+        self.character.hit_points = total_hit_points;
+        self.character.total_hit_points = total_hit_points;
     }
 
     fn weapons(&mut self) {

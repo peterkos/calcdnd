@@ -16,6 +16,8 @@ pub struct Character {
     pub proficiency_bonus: u8,
     pub stats: Stats,
     pub saving_throws: Vec<SavingThrow>,
+    pub hit_points: u8,
+    pub total_hit_points: u8,
     pub weapons: Vec<Weapon>,
     // pub skills: Skills
 }
@@ -54,15 +56,23 @@ impl Character {
         // Saving throws table
         let mut saving_throws_table = Table::new();
         saving_throws_table.set_format(*format::consts::FORMAT_NO_LINESEP_WITH_TITLE);
-        saving_throws_table.set_titles(row!["Y/N", "Modifier"]);
+        saving_throws_table.set_titles(row!["Saving Throws"]);
         for saving_throw in &self.saving_throws {
-            let valid = saving_throw.valid;
-            let stat  = saving_throw.stat.to_string();
-            saving_throws_table.add_row(row![valid, stat]);
+            if saving_throw.valid {
+                let throw_name = saving_throw.stat.to_string();
+                saving_throws_table.add_row(row![throw_name]);
+            }
         }
 
-        super_table.set_titles(row!["Stats", "Saving Throws"]);
-        super_table.add_row(row![stat_table, saving_throws_table]);
+        // Hit points table
+        let mut hit_points_table = Table::new();
+        hit_points_table.set_format(*format::consts::FORMAT_NO_LINESEP_WITH_TITLE);
+        hit_points_table.set_titles(row!["Hit Points"]);
+        hit_points_table.add_row(row![format!("{}/{}", self.hit_points, self.total_hit_points)]);
+
+        super_table.set_titles(row!["Stats", "Hit Points"]);
+        super_table.add_row(row![stat_table, hit_points_table]);
+        super_table.add_row(row![saving_throws_table]);
 
         // Write it out
         let term = Term::stderr();

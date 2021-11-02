@@ -37,7 +37,7 @@ fn main() -> std::io::Result<()> {
         _ => unimplemented!()
     }
 
-    let game = Game{ character: config.character };
+    let mut game = Game{ character: config.character };
 
     game.event_loop();
 
