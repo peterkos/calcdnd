@@ -16,58 +16,24 @@ mod config;
 mod character;
 mod data;
 mod game;
+mod event;
+mod ui;
 
 use config::*;
 use game::*;
-
-use std::{error::Error, io};
-use termion::{event::Key, input::MouseTerminal, raw::IntoRawMode, screen::AlternateScreen};
-use tui::{
-    backend::TermionBackend,
-    layout::{Alignment, Constraint, Direction, Layout},
-    style::{Color, Modifier, Style},
-    text::Span,
-    widgets::{Block, BorderType, Borders},
-    Terminal,
-};
-
-mod event;
-use event::{Event, Events};
+use ui::*;
 
 
 
-fn main() -> Result<(), Box<dyn Error>> {
 
-    let stdout = io::stdout().into_raw_mode()?;
-    let stdout = MouseTerminal::from(stdout);
-    let stdout = AlternateScreen::from(stdout);
-    let backend = TermionBackend::new(stdout);
-    let mut terminal = Terminal::new(backend)?;
-
-    let events = Events::new();
-
-    loop {
-        terminal.draw(|f| {
-
-            let size = f.size();
-
-            let block = Block::default()
-                .borders(Borders::ALL)
-                .title("Test Title")
-                .title_alignment(Alignment::Center)
-                .border_type(BorderType::Rounded);
-            f.render_widget(block, size);
+fn main()  {
 
 
-        })?;
-
-        if let Event::Input(key) = events.next()? {
-            if key == Key::Char('q') {
-                break;
-            }
-        }
-    }
+    let ui = UI{ state: ScreenState::New };
+    match ui.start() {
+        Ok(()) => (),
+        Err(e) => panic!("Error starting UI.")
+    };
 
 
-    Ok(())
 }
