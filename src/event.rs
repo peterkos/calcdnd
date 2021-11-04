@@ -1,3 +1,10 @@
+
+/**
+ * This file borrowed from:
+ * https://github.com/fdehau/tui-rs/blob/v0.16.0/examples/util/event.rs
+ */
+
+
 use std::io;
 use std::sync::mpsc;
 use std::thread;
