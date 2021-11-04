@@ -24,15 +24,16 @@ use game::*;
 use ui::*;
 
 
-
-
 fn main()  {
 
+    let mut config = Config::default();
 
-    let ui = UI{ state: ScreenState::New };
+    config.pick_character();
+
+    let mut ui = UI::new(ScreenState::ViewCharacter, config.character);
     match ui.start() {
         Ok(()) => (),
-        Err(e) => panic!("Error starting UI.")
+        Err(e) => panic!("Error starting UI: {}", e)
     };
 
 
