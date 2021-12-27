@@ -2,7 +2,7 @@
 /// https://www.rawpixel.com/image/581164/hand-drawn-dragon
 /// using the following webiste:
 /// https://www.text-image.com/convert/ascii.html
-pub fn loading(){
+pub fn loading() {
 print!("                                  `````           
                                   `-/yyy:`        
        `.:/:`                      /yddddy-       
