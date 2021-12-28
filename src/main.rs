@@ -15,11 +15,12 @@ mod config;
 mod character;
 mod data;
 mod game;
-
+mod dragon;
 use config::*;
 use game::*;
 
-fn main() -> std::io::Result<()> {
+pub fn main() -> std::io::Result<()> {
+    dragon::loading();
 
     let selections = Select::new()
         .default(0)
