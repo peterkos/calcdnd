@@ -75,7 +75,27 @@ impl Character {
         super_table.add_row(row![saving_throws_table]);
 
         // Write it out
-        let term = Term::stderr();
+        let term = Term::buffered_stdout();
         term.write_line(&super_table.to_string()).unwrap();
+    }
+
+
+    /// Prints only stats and returns the number of lines printed
+    pub fn print_stats(&self, term: &Term) {
+
+        // Stats table
+        let mut stat_table = Table::new();
+        stat_table.set_format(*format::consts::FORMAT_NO_LINESEP_WITH_TITLE);
+        stat_table.set_titles(row!["Stat", "Value"]);
+        stat_table.add_row(row!["Strength",     self.stats.strength]);
+        stat_table.add_row(row!["Dexterity",    self.stats.dexterity]);
+        stat_table.add_row(row!["Constitution", self.stats.constitution]);
+        stat_table.add_row(row!["Intelligence", self.stats.intelligence]);
+        stat_table.add_row(row!["Wisdom",       self.stats.wisdom]);
+        stat_table.add_row(row!["Charisma",     self.stats.charisma]);
+
+        // Write it out
+        term.write_line(&stat_table.to_string()).unwrap();
+        term.flush().unwrap();
     }
 }

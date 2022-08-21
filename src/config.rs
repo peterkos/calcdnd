@@ -1,5 +1,6 @@
 
 
+use console::Term;
 use console::style;
 use dialoguer::{Confirm, MultiSelect, Select, Input};
 use serde::Serialize;
@@ -35,8 +36,11 @@ impl Config {
         self.name();
         self.class();
         self.level();
+
         self.character.calc_proficiency();
+
         self.stats();
+
         self.hit_points();
         self.weapons();
         self.saving_throws();
@@ -97,21 +101,43 @@ impl Config {
         let class = Class::from_str(classes[select_index]).unwrap();
 
         match class {
-            Class::Barbarian => println!("Yay!")
+            Class::Barbarian => println!("Barbarian selected!")
         }
 
         self.character.class = class;
     }
 
-    fn stats(&mut self) {
-        let strength     = Input::new().with_prompt("Strength").interact_text().unwrap();
-        let dexterity    = Input::new().with_prompt("Dexterity").interact_text().unwrap();
-        let constitution = Input::new().with_prompt("Constitution").interact_text().unwrap();
-        let intelligence = Input::new().with_prompt("Intelligence").interact_text().unwrap();
-        let wisdom       = Input::new().with_prompt("Wisdom").interact_text().unwrap();
-        let charisma     = Input::new().with_prompt("Charisma").interact_text().unwrap();
+    /// Resets the screen to show a little table
+    /// Returns the stat value that the user input
+    fn prompt_and_print_stats(&self, stat_name: Option<&str>) -> u8 {
 
-        self.character.stats = Stats { strength, dexterity, constitution, intelligence, wisdom, charisma };
+        let term = Term::buffered_stdout();
+        // Hardcoded for now -- 6 stats + table row titles + dividers
+        term.clear_last_lines(12).unwrap();
+        self.character.print_stats(&term);
+        term.flush().unwrap();
+
+        // Then prompting
+        let mut stat_value = 0;
+        if let Some(stat_name) = stat_name {
+            stat_value = Input::new().with_prompt(stat_name).interact_text().unwrap();
+        }
+
+        stat_value
+    }
+
+    fn stats(&mut self) {
+
+        self.character.stats = Stats::default();
+        // Print an initial one before the rest
+        self.character.print_stats(&Term::stdout());
+        self.character.stats.strength     = self.prompt_and_print_stats(Some("Strength"));
+        self.character.stats.dexterity    = self.prompt_and_print_stats(Some("Dexterity"));
+        self.character.stats.constitution = self.prompt_and_print_stats(Some("Constitution"));
+        self.character.stats.intelligence = self.prompt_and_print_stats(Some("Intelligence"));
+        self.character.stats.wisdom       = self.prompt_and_print_stats(Some("Wisdom"));
+        self.character.stats.charisma     = self.prompt_and_print_stats(Some("Charisma"));
+        self.prompt_and_print_stats(None);
     }
 
     fn hit_points(&mut self) {
@@ -142,9 +168,6 @@ impl Config {
             .collect();
 
         self.character.weapons = mapped_weapons;
-
-        println!("User selected {:?}", self.character.weapons);
-
     }
 
     fn saving_throws(&mut self) {

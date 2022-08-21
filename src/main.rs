@@ -19,14 +19,14 @@ mod game;
 use config::*;
 use game::*;
 
-fn main() -> std::io::Result<()> {
+    fn main() -> std::io::Result<()> {
 
     let selections = Select::new()
         .default(0)
         .item("New Character")
         .item("Select existing character")
         .item("Quit")
-        .interact_on(&Term::stderr())?;
+        .interact_on(&Term::buffered_stdout())?;
 
     let mut config = Config::default();
 
