@@ -77,6 +77,7 @@ impl Character {
         // Write it out
         let term = Term::buffered_stdout();
         term.write_line(&super_table.to_string()).unwrap();
+        term.flush().unwrap();
     }
 
 

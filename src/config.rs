@@ -74,7 +74,7 @@ impl Config {
         };
 
         self.character = character;
-        println!("Character {} imported sucessfully.", style(&self.character.name).green());
+        println!("Character {} imported successfully.", style(&self.character.name).green());
         ()
     }
 
